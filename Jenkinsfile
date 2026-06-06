@@ -6,13 +6,11 @@ pipeline {
         AZURE_HOST = "ubuntu@20.85.247.114"
     }
 
-    stages {
-
-        stage('Clone Repo') {
-            steps {
-                git 'https://github.com/shitesh372/project.git'
-            }
-        }
+    stage('Clone Repo') {
+    steps {
+        git branch: 'main', url: 'https://github.com/shitesh372/project.git'
+    }
+}
 
         stage('Deploy to AWS') {
             steps {
