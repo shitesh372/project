@@ -1,17 +1,15 @@
 pipeline {
     agent any
-
     environment {
         AWS_HOST = "ubuntu@54.197.78.72"
         AZURE_HOST = "ubuntu@20.85.247.114"
     }
-
-    stage('Clone Repo') {
-    steps {
-        git branch: 'main', url: 'https://github.com/shitesh372/project.git'
-    }
-}
-
+    stages {
+        stage('Clone Repo') {
+            steps {
+                git branch: 'main', url: 'https://github.com/shitesh372/project.git'
+            }
+        }
         stage('Deploy to AWS') {
             steps {
                 sh """
@@ -23,7 +21,6 @@ pipeline {
                 """
             }
         }
-
         stage('Deploy to Azure') {
             steps {
                 sh """
