@@ -9,6 +9,11 @@ pipeline {
             steps {
                 git branch: 'main', url: 'https://github.com/shitesh372/project.git'
             }
+    stage('Deploy with Ansible') {
+        steps {
+            sh 'ansible-playbook -i inventory.ini playbook.yml --ask-vault-pass'
+    }
+}
         }
         stage('Deploy to AWS') {
             steps {
