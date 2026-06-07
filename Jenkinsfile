@@ -38,8 +38,6 @@ stage('Deploy to AWS') {
     }
 }
 
-       
-
         stage('Deploy to Azure') {
             steps {
                 sh """
