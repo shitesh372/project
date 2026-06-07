@@ -24,20 +24,21 @@ pipeline {
                 }
             }
         }
-
-        stage('Deploy to AWS') {
-            steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'aws-key-id', keyFileVariable: 'SSH_KEY')]) {
-                    sh """
-                        scp -i $SSH_KEY index-aws.html ${AWS_HOST}:/tmp/
-                        ssh -i $SSH_KEY ${AWS_HOST} '
-                            sudo mv /tmp/index-aws.html /var/www/html/index.html &&
-                            sudo systemctl restart nginx
-                        '
-                    """
-                }
-            }
+stage('Deploy to AWS') {
+    steps {
+        withCredentials([sshUserPrivateKey(credentialsId: 'aws-key-id', keyFileVariable: 'SSH_KEY')]) {
+            sh """
+                scp -o StrictHostKeyChecking=no -i $SSH_KEY index-aws.html ${AWS_HOST}:/tmp/
+                ssh -o StrictHostKeyChecking=no -i $SSH_KEY ${AWS_HOST} '
+                    sudo mv /tmp/index-aws.html /var/www/html/index.html &&
+                    sudo systemctl restart nginx
+                '
+            """
         }
+    }
+}
+
+       
 
         stage('Deploy to Azure') {
             steps {
