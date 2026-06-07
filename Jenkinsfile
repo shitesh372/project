@@ -23,7 +23,7 @@ pipeline {
             steps {
                 sh '''
                     echo "Checking AWS..."
-                    curl -s http://3.231.27.202 | grep "Welcome to AWS"
+                    curl -s http://100.51.3.180 | grep "Welcome to AWS"
 
                     echo "Checking Azure..."
                     curl -s http://13.68.190.21 | grep "Welcome to Azure"
