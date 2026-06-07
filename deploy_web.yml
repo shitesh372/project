@@ -1,0 +1,44 @@
+---
+- name: Deploy custom pages
+  hosts: webservers
+  become: yes
+
+  tasks:
+
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Ensure nginx running
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Copy AWS page
+      copy:
+        src: index-aws.html
+        dest: /var/www/html/index.html
+      when: "'aws' in group_names"
+
+    - name: Copy Azure page
+      copy:
+        src: index-azure.html
+        dest: /var/www/html/index.html
+      when: "'azure' in group_names"
+
+    - name: Restart nginx
+      service:
+        name: nginx
+        state: restarted
+
+    - name: Verify page
+      uri:
+        url: http://localhost
+        return_content: yes
+      register: page
+
+    - debug:
+        var: page.content
