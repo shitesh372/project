@@ -26,7 +26,7 @@ pipeline {
                     curl -s http://100.51.3.180 | grep "Welcome to AWS"
 
                     echo "Checking Azure..."
-                    curl -s http://13.68.190.21 | grep "Welcome to Azure"
+                    curl -s http://74.235.8.57 | grep "Welcome to Azure"
                 '''
             }
         }
