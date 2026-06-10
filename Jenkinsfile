@@ -16,21 +16,23 @@ pipeline {
         }
 
         stage('Deploy to AWS') {
-    steps {
-        sh '''
-          export ANSIBLE_HOST_KEY_CHECKING=False
-          ansible aws -i inventory.ini -m copy \
-            -a "src=index-aws.html dest=/var/www/html/index.html"
-        '''
-    }
-}
-
+            steps {
+                sh '''
+                  export ANSIBLE_HOST_KEY_CHECKING=False
+                  ansible aws -i inventory.ini -m copy \
+                    -a "src=index-aws.html dest=/var/www/html/index.html owner=www-data group=www-data mode=0644" \
+                    --become --become-user=root
+                '''
+            }
+        }
 
         stage('Deploy to Azure') {
             steps {
                 sh '''
+                  export ANSIBLE_HOST_KEY_CHECKING=False
                   ansible azure -i inventory.ini -m copy \
-                    -a "src=index-azure.html dest=/var/www/html/index.html"
+                    -a "src=index-azure.html dest=/var/www/html/index.html owner=www-data group=www-data mode=0644" \
+                    --become --become-user=root
                 '''
             }
         }
