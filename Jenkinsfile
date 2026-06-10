@@ -4,18 +4,25 @@ pipeline {
     stages {
         stage('Clone Repo') {
             steps {
-                git branch: 'main', url: 'https://github.com/shitesh372/project.git'
+                git branch: 'main', url: 'https://github.com/<your-username>/<your-repo>.git'
             }
         }
 
-        stage('Deploy with Ansible') {
+        stage('Deploy to AWS') {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'aws-key-id', keyFileVariable: 'SSH_KEY')]) {
-                    sh '''
-                        ansible-playbook -i inventory.ini deploy_web.yml \
-                        --private-key $SSH_KEY
-                    '''
-                }
+                sh '''
+                    scp -i ~/.ssh/terraform-key-fixed.pem index-aws.html ubuntu@100.56.101.120:/var/www/html/index.html
+                    ssh -i ~/.ssh/terraform-key-fixed.pem ubuntu@100.56.101.120 "sudo systemctl restart nginx"
+                '''
+            }
+        }
+
+        stage('Deploy to Azure') {
+            steps {
+                sh '''
+                    sshpass -p "AzureVM@Secure1234" scp index-azure.html azureuser@20.85.235.177:/var/www/html/index.html
+                    sshpass -p "AzureVM@Secure1234" ssh azureuser@20.85.235.177 "sudo systemctl restart nginx"
+                '''
             }
         }
 
@@ -23,10 +30,10 @@ pipeline {
             steps {
                 sh '''
                     echo "Checking AWS..."
-                    curl -s http://100.51.3.180 | grep "Welcome to AWS"
+                    curl -s http://100.56.101.120 | grep "Welcome to AWS"
 
                     echo "Checking Azure..."
-                    curl -s http://74.235.8.57 | grep "Welcome to Azure"
+                    curl -s http://20.85.235.177 | grep "Welcome to Azure"
                 '''
             }
         }
