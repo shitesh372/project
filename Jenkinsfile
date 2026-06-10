@@ -7,10 +7,12 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/shitesh372/project.git'
             }
         }
-stage('Deploy to AWS') {
+  stage('Deploy to AWS') {
     steps {
         withCredentials([sshUserPrivateKey(credentialsId: 'aws-key', keyFileVariable: 'SSH_KEY')]) {
-            sh "scp -i $SSH_KEY index-aws.html ubuntu@100.56.101.120:/var/www/html/index.html"
+            sh '''
+              scp -o StrictHostKeyChecking=no -i $SSH_KEY index-aws.html ubuntu@100.56.101.120:/var/www/html/index.html
+            '''
         }
     }
 }
