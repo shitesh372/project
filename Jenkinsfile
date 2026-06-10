@@ -7,15 +7,14 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/shitesh372/project.git'
             }
         }
-
-        stage('Deploy to AWS') {
-            steps {
-                sh '''
-                    scp -i ~/.ssh/terraform-key-fixed.pem index-aws.html ubuntu@100.56.101.120:/var/www/html/index.html
-                    ssh -i ~/.ssh/terraform-key-fixed.pem ubuntu@100.56.101.120 "sudo systemctl restart nginx"
-                '''
-            }
+stage('Deploy to AWS') {
+    steps {
+        withCredentials([sshUserPrivateKey(credentialsId: 'aws-key', keyFileVariable: 'SSH_KEY')]) {
+            sh "scp -i $SSH_KEY index-aws.html ubuntu@100.56.101.120:/var/www/html/index.html"
         }
+    }
+}
+
 
         stage('Deploy to Azure') {
             steps {
