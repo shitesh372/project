@@ -44,7 +44,7 @@ pipeline {
                   curl -s http://100.56.101.120/index.html | grep "AWS"
 
                   echo "Verifying Azure deployment..."
-                  curl -s http://52.172.45.33/index.html | grep "Azure"
+                  curl -s http://20.85.235.177/index.html | grep "Azure"
                 '''
             }
         }
