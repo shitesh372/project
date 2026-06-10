@@ -41,7 +41,7 @@ pipeline {
             steps {
                 sh '''
                   echo "Verifying AWS deployment..."
-                  curl -s http://34.197.53.149/index.html | grep "AWS"
+                  curl -s http://3.226.11.145/index.html | grep "AWS"
 
                   echo "Verifying Azure deployment..."
                   curl -s http://20.85.235.177/index.html | grep "Azure"
