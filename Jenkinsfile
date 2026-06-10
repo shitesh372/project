@@ -16,13 +16,15 @@ pipeline {
         }
 
         stage('Deploy to AWS') {
-            steps {
-                sh '''
-                  ansible aws -i inventory.ini -m copy \
-                    -a "src=index-aws.html dest=/var/www/html/index.html"
-                '''
-            }
-        }
+    steps {
+        sh '''
+          export ANSIBLE_HOST_KEY_CHECKING=False
+          ansible aws -i inventory.ini -m copy \
+            -a "src=index-aws.html dest=/var/www/html/index.html"
+        '''
+    }
+}
+
 
         stage('Deploy to Azure') {
             steps {
